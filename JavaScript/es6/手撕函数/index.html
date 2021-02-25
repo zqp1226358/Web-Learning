@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="call.js"></script>
+</head>
+<body>
+    <script>
+        //函数
+        function add(a,b){
+            console.log(arguments);
+            return a+b+this.c;
+        }
+        //对象
+        let obj={
+            c:521
+        }
+        //全局属性
+        window.c = 1314
+        //执行call函数
+        console.log(call(add,obj,10,20));
+        console.log(obj)
+        console.log(call(add,null,10,20));
+
+        //执行apply函数
+        console.log(apply(add,obj,[10,20]));
+        console.log(apply(add,null,[10,20]));
+
+        //执行bind函数
+        let f = bind(add,obj,10,20);
+        console.log(f(40,50));
+        let f2= bind(add,obj);
+        console.log(f2(10,20));//加...args
+    </script>
+</body>
+</html>
