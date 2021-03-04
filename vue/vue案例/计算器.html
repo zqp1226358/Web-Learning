@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算器</title>
+    <!--vue cdn-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <style>
+        body{
+            margin: 100px;
+        }
+        #app{
+            width: 175px;
+            height: 285px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 20px;
+        }
+        #input-box{
+            text-align: right;
+            width: 165px;
+            height: 30px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            margin-bottom: 10px;
+            padding: 0 5px;
+            color: #666;
+        }
+        #app .btn{
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            cursor: pointer;
+            background-color: white;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        #app .btn:hover{
+            background-color: #333;
+            color: white;
+        }
+        #app .btn-double{
+            width: 84px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!--getValue === get-value-->
+        <result-box :get-value="resultValue"></result-box>
+        <calc-Box>
+            <button class="btn" @click="delete2()">C</button>
+            <button class="btn" @click="sys()">+/-</button>
+            <button class="btn" @click="symbol('x')">x</button>
+            <button class="btn" @click="symbol('÷')">÷</button>
+            <button class="btn" @click="input('1')">1</button>
+            <button class="btn" @click="input('2')">2</button>
+            <button class="btn" @click="input('3')">3</button>
+            <button class="btn" @click="symbol('-')">-</button>
+            <button class="btn" @click="input('4')">4</button>
+            <button class="btn" @click="input('5')">5</button>
+            <button class="btn" @click="input('6')">6</button>
+            <button class="btn" @click="symbol('+')">+</button>
+            <button class="btn" @click="input('7')">7</button>
+            <button class="btn" @click="input('8')">8</button>
+            <button class="btn" @click="input('9')">9</button>
+            <button class="btn" @click="symbol('%')">%</button>
+            <button class="btn" @click="input('0')">0</button>
+            <button class="btn" @click="point()">.</button>
+            <button class="btn btn-double" @click="cal()">=</button>
+        </calc-Box>
+        <!--button>678</button-->
+        <!--button>678</button-->
+        <!--换行就有间距两个按钮之间-->
+    </div>
+</body>
+
+<script>
+    const resultBox = {
+        template:`<input id="input-box" type="text" v-model="value" readonly>`,
+        //父子通信
+        props : ['getValue'],
+        computed :{
+            value(){
+                return this.getValue
+            }
+        }
+    }
+
+    const calcBox = {
+        template:`<div id="calc-box">
+            <slot></slot>
+        </div>`
+    }
+    //vue instantiate
+    const app = new Vue({
+        el : '#app',
+        data: {
+            resultValue:0
+        },
+
+        //component
+        components : {
+            //result frame
+            'result-box' : resultBox,
+
+            'calc-box' : calcBox
+        },
+
+        methods:{
+            input(param){
+                //除掉开始的多余零 防止0.被和谐  防止0 + 被和谐
+                if(parseInt(this.resultValue) === 0 && !/0[\.|\s]/.test(this.resultValue)){
+                    this.resultValue = param;
+                }else{
+                    this.resultValue+=param;
+                }
+                
+            },
+
+            //+-*/
+            symbol(param){
+                this.resultValue += " " + param +" "
+            },
+
+            point(){
+                const strValue = this.toStr();
+                //得到最后一位数值
+                const lastNumber = strValue.substring(strValue.lastIndexOf(' '));
+                // console.log(strValue.lastIndexOf(' '));
+                //判断是否有小数点
+                if(lastNumber.indexOf('.') !== -1){
+                    return
+                }else{
+                    this.resultValue+=".";
+                }
+                
+            },
+
+            //转化成字符串
+            toStr(){
+                return this.resultValue.toString();
+            },
+
+            delete2(){
+                this.resultValue = 0
+            },
+
+            sys(){
+                let strValue = this.toStr();
+                let lastNumber = strValue.substring(strValue.lastIndexOf(' '));
+                
+                let preNumber = strValue.substr(0,strValue.lastIndexOf(' '));
+                if(lastNumber.indexOf('-') === -1){
+                    lastNumber = ' -' + lastNumber.trim();                
+                }else{
+                    lastNumber = ' '+lastNumber.trim().substr(1);
+                }
+
+                this.resultValue = preNumber + lastNumber;
+            },
+            cal(){
+                try{
+                    const strValue = this.resultValue.replace('x','*').replace('÷','/');
+
+                    this.resultValue = eval(strValue);
+                }catch(e){
+                    alert('error')
+                }
+                
+            }
+        }
+    })
+</script>
+</html>

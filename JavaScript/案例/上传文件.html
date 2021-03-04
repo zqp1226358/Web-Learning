@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传文件</title>
+    <!-- 
+        参考文献：
+        属性讲解：https://blog.csdn.net/qq_41564928/article/details/90580375
+        https://www.jb51.net/article/121757.html
+
+        其他
+        https://www.cnblogs.com/007sx/p/7520529.html
+    
+    -->
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data" id="upload">
+        <input type="file" name="file" id="pic">
+        <input type="button" value="提交" onclick="uploadPic()">
+        <span class="showUrl"></span>
+        <img src="" alt="" class="showImg">
+    </form>
+   <!--第二种写法！！！-->
+   <br>
+   <!--https://www.cnblogs.com/fozero/p/8835628.html-->
+   <div class="cotent-img">
+       <ul class="content-img-list">
+
+       </ul>
+       <div class="file">
+           <i class="ico-plus"></i>上传图片，支持jpg/png <input type="file" name="file" id="upload" accept="image/*">
+           <!--如果不限制图像的格式，可以写为：accept="image/*"。-->
+       </div>
+   </div>
+    <script>
+        function uploadPic(){
+            var form = document.getElementById('upload'),
+                formData = new FormData(form);
+            $.ajax({
+                url:"https://sscpre.boe.com/v1/medical-console/medical/file/upload",
+                type:"post",
+                data:formData,
+                processData:false,
+                contentType:false,
+                success:function(res){
+                    if(res){
+                        alert("成功");
+                    }
+                    console.log(res);
+                    $("#pic").val(""); 
+                    $(".showUrl").html(res); 
+                    $(".showPic").attr("src",res); 
+                },
+                error:function(err){ 
+                    alert("网络连接失败,稍后重试",err); 
+                } 
+            })
+        }
+    </script>
+</body>
+</html>
