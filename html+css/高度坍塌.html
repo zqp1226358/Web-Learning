@@ -1,0 +1,72 @@
+<!-- flex: 1; 为什么能平分元素 -->
+<!-- marigin：auto 水平居中 -->
+<!-- 默认是标准盒子，border-box 是IE盒子模型 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .parent{
+            /* display: flex; */
+        }
+        .div{
+            border: 1px solid red;
+            flex: 1;
+        }
+        .m{
+            height: 100px;
+            width: 100px;
+            background: red;
+            /* margin: 0 auto; 可以水平居中*/
+            /* margin-left: auto; 相当于float right 
+            margin-right 不设置的话默认是0，width 定宽之后，margin-left取值为 auto ，自动占据了剩余的全部宽度 
+            除了 width 和 margin-left 其他值都是 0 ，把宽度值带入计算得到 margin-left = 包含块的宽度-100px */
+        }
+        .float-list{
+            padding: 10px;
+            border: 1px solid red;
+            list-style: none;
+            /* 第二种清除浮动 不需要改动HTML结构 */
+            overflow: hidden;
+            /* overflow: auto; */
+        }
+        /* 第三种清除浮动的方法 */
+        /* .float-list::after{
+            content: "020";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        } */
+        .item{
+            width: 50px;
+            height: 50px;
+            background: blue;
+            float: left;
+            border: 1px solid yellow;
+        }
+        .clear{
+            /* clear: both; 第一种清除浮动*/
+        }
+    </style>
+</head>
+<body>
+    <section class="parent">
+        <!-- <div class="m">margin:auto</div> -->
+        <!-- <div class="div">我是一个div</div>
+        <div class="div">我是一个很多字div</div>
+        <div class="div">我是一个更多字而且第三个div</div> -->
+        <ul class="float-list">
+            <li class="item">1</li>
+            <li class="item">2</li>
+            <li class="item">3</li>
+            <li class="item">4</li>
+            <li class="item">5</li>
+            <br class="clear"/>
+        </ul>
+    </section>
+</body>
+</html>
