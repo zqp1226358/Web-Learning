@@ -1,2 +1,2 @@
 # Web-Learning
-Concentrate on web. study, accumulate experience
+Concentrate on web. study, accumulate experience.
